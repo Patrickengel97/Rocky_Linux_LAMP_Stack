@@ -1,0 +1,65 @@
+# LAMP Stack Setup Process on Rocky Linux
+
+## Setup and Install Apache
+
+Update the OS and install the Apache package:
+   ```bash
+   sudo dnf update -y
+   sudo dnf install httpd
+
+1. Start and enable Apache:
+sudo systemctl start httpd
+sudo systemctl enable httpd
+
+2. Configure the firewall to allow HTTP (port 80) and HTTPS (port 443) traffic:
+sudo firewall-cmd --permanent --add-port=80/tcp
+sudo firewall-cmd --permanent --add-port=443/tcp
+sudo firewall-cmd --reload
+
+3. Verify Apache's status:
+sudo systemctl status httpd
+
+## Install MariaDB Server
+
+1. Install MariaDB Server:
+sudo dnf install mariadb-server
+
+2. Start and enable MariaDB:
+sudo systemctl start mariadb
+sudo systemctl enable mariadb
+
+3. Secure MariaDB installation and set root password:
+sudo mysql_secure_installation
+
+4. Verify MariaDB's status:
+sudo systemctl status mariadb
+
+## Install PHP
+1. Enable PHP 8.1:
+sudo dnf module enable php:8.1
+
+2. Install PHP and required modules:
+sudo dnf install php php-cli php-gd php-curl php-zip php-mbstring php-mysqlnd -y
+
+3. Restart Apache to process PHP requests:
+sudo systemctl restart httpd
+
+## Test PHP
+1. Create and edit the info.php file:
+sudo nano /var/www/html/info.php
+
+2. Add the following code to info.php:
+<?php
+phpinfo();
+?>
+
+3. Save the file (Ctrl + O) and exit (Ctrl + X).
+
+4. Restart Apache to apply changes:
+sudo systemctl restart httpd
+
+5. Access the info.php page in your browser:
+http://server_ip/info.php
+
+6. A table with PHP info should appear.
+7. After testing, delete info.php from the server.
